@@ -1,0 +1,73 @@
+Equipment: 
+- 2 Cluster Racks (Holds 4 Each)
+- 8 Raspberry Pi 4's (4 GB each)
+- 8 Raspberry PoE hats
+- 1 8 PoE port switch
+- 9 cat6 ethernet cables
+- 8 micro sd cards
+- 1 mini-hdmi to hdmi cord
+- Raspberry Pi Keyboard
+
+Assembly:
+
+
+
+
+
+
+Download the latest ubuntu server for raspberry pi. (As of current, using 19.10)
+https://ubuntu.com/download/raspberry-pi
+
+Burn the image on microsd card using etcher. 
+https://www.balena.io/etcher/
+
+Plug the microsd card to Raspberry pi instance. (Configure one at a time.)
+
+Login with default ubuntu credentials. Username and password is Ubuntu
+
+Login as Root.
+sudo su -
+
+Internet Connectivity and Setting up Static IP address.
+By default, ubuntu server will not intiate a dhcp request for an ip address. This has to be manually done.
+
+dhclient -v
+
+Install updates and upgrade os packages.
+apt update && apt upgrade -y
+
+Install net-tools (To use ifconfig)
+apt install net-tools
+
+Ok lets setup a static ip address:
+Starting with Ubuntu 18.04, the new way to configure networking is through netplan.
+Netplan abstracts network configuration through yaml, which is placed in /etc/netplan.  
+For my info on netplan https://netplan.io/
+
+To create static ip config:  (Used instructions from this site: https://www.techrepublic.com/article/how-to-configure-a-static-ip-address-in-ubuntu-server-18-04/)
+
+vim /etc/netplan/01-netcfg.yaml
+
+Example of my network config in one of my nodes:
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+      eth0:
+        dhcp4: no
+        addresses: [192.168.1.211/24]
+        gateway: 192.168.1.254
+        nameservers:
+          addresses: [127.0.0.53]
+          
+Save the config file, then to apply the changes: 
+netplan apply
+
+The server should now use that static ip address upon startup!
+
+To make it easier on me to differentiate amongst servers, Im going to change the hostnames.
+https://linuxize.com/post/how-to-change-hostname-on-ubuntu-18-04/
+
+I also plan to implement a local dns server, so each server can easily find and connect to each other.
+
+
