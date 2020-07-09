@@ -15,7 +15,7 @@ Assembly:
 
 
 
-Download the latest ubuntu server for raspberry pi. (As of current, using 19.10)
+Download the latest ubuntu server for raspberry pi. (As of current, using 20.04 LTS)
 https://ubuntu.com/download/raspberry-pi
 
 Burn the image on microsd card using etcher. 
